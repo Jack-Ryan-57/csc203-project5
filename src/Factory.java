@@ -107,6 +107,16 @@ public class Factory {
             return new CustomAnimation(p, images, 0, animationPeriod, world, scheduler);
     }
 
+    public static Explosion createExplosion(Point p,
+        List<PImage> images,
+        int animationPeriod, 
+        WorldModel world,
+        EventScheduler scheduler){
+
+                return new Explosion(p, images, 0, animationPeriod, world, scheduler, false);
+
+    }
+
     public static Gravestone createGravestone(Point p, ImageStore imageStore, WorldModel world){
         Gravestone g = new Gravestone(p, imageStore.getImageList(Functions.GRAVE_KEY));
         return g;

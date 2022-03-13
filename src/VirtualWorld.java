@@ -85,24 +85,27 @@ public final class VirtualWorld extends PApplet
         System.out.println("CLICK! " + pressed.x + ", " + pressed.y);
         //Check current occupant
         Optional<Entity> ogOccupant = world.getOccupant(pressed);
+        boolean grave = false;
         //Check if dude is at the location we pressed on (because this spot will later be overtaken by the explosion entity)
         if (ogOccupant.isPresent() && (ogOccupant.get() instanceof DudeFull || ogOccupant.get() instanceof DudeNotFull)){
             System.out.println("CLICKED ON DUDE");
             world.removeEntity(ogOccupant.get());
             scheduler.unscheduleAllEvents(ogOccupant.get());
-            Gravestone g = Factory.createGravestone(pressed, imageStore, world);
-            world.addEntity(g);
-
+            grave = true;
         }
         //Explode on click
-        CustomAnimation ex = Factory.createAnimation(pressed, imageStore.getImageList(Functions.EXPLOSION_KEY), Functions.EXPLOSION_ANIMATION_PERIOD, world, scheduler);
+        Explosion ex = Factory.createExplosion(pressed, imageStore.getImageList(Functions.EXPLOSION_KEY), Functions.EXPLOSION_ANIMATION_PERIOD, world, scheduler);
         world.addEntity(ex);
         ex.scheduleActions(scheduler, world, imageStore);
+        if (grave){
+            Gravestone g = Factory.createGravestone(pressed, imageStore, world);
+            world.addEntity(g);
+            ex.setInterrupt(true);
+        }
         // Make a crater at the point of the explosion (change the background)
         Crater crater = Factory.createCrater("crater", pressed, imageStore.getImageList(Functions.CRATER_KEY), world, scheduler);
         List<Point> craterPoints = crater.getAffectedPoints();
         crater.displayImages();
-        
         for (Point p: craterPoints){
             Optional<Entity> thing = world.getOccupant(p);
             if (thing.isPresent() && (thing.get() instanceof DudeFull || thing.get() instanceof DudeNotFull)){
@@ -114,10 +117,6 @@ public final class VirtualWorld extends PApplet
                 // Replace dude with a gravestone
                 Gravestone g = Factory.createGravestone(location, imageStore, world);
                 world.addEntity(g);
-                // Replace dude with dead dude :(
-                //DeadDude deadDude = new DeadDude(location, imageStore.getImageList(Functions.DEADDUDE_KEY), 0, Functions.DEADDUDE_ANIMATION_PERIOD, world, scheduler, imageStore);
-                //world.addEntity(deadDude);
-                //deadDude.scheduleActions(scheduler, world, imageStore);
             }
         }
 

@@ -21,7 +21,6 @@ public class DeadDude extends CustomAnimation{
             this.setImageIndex(this.getImageIndex() + 1);
         }else{
             //Replace dead dude with a gravestone
-            Factory.endAnimation(getWorld(), this, getScheduler());
             Gravestone g = Factory.createGravestone(getPosition(), imageStore, getWorld());
             world.addEntity(g);
         }
