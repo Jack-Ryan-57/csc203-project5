@@ -100,10 +100,12 @@ public final class VirtualWorld extends PApplet
                 Point location = thing.get().getPosition();
                 world.removeEntity(thing.get());
                 scheduler.unscheduleAllEvents(thing.get());
+                Gravestone g = Factory.createGravestone(location, imageStore, world);
+                world.addEntity(g);
                 // Replace dude with dead dude :(
-                DeadDude deadDude = new DeadDude(location, imageStore.getImageList(Functions.DEADDUDE_KEY), 0, Functions.DEADDUDE_ANIMATION_PERIOD, world, scheduler, imageStore);
-                world.addEntity(deadDude);
-                deadDude.scheduleActions(scheduler, world, imageStore);
+                //DeadDude deadDude = new DeadDude(location, imageStore.getImageList(Functions.DEADDUDE_KEY), 0, Functions.DEADDUDE_ANIMATION_PERIOD, world, scheduler, imageStore);
+                //world.addEntity(deadDude);
+                //deadDude.scheduleActions(scheduler, world, imageStore);
             }
         }
 
