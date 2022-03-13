@@ -83,7 +83,17 @@ public final class VirtualWorld extends PApplet
     public void mousePressed() {
         Point pressed = mouseToPoint(mouseX, mouseY);
         System.out.println("CLICK! " + pressed.x + ", " + pressed.y);
+        //Check current occupant
+        Optional<Entity> ogOccupant = world.getOccupant(pressed);
+        //Check if dude is at the location we pressed on (because this spot will later be overtaken by the explosion entity)
+        if (ogOccupant.isPresent() && (ogOccupant.get() instanceof DudeFull || ogOccupant.get() instanceof DudeNotFull)){
+            System.out.println("CLICKED ON DUDE");
+            world.removeEntity(ogOccupant.get());
+            scheduler.unscheduleAllEvents(ogOccupant.get());
+            Gravestone g = Factory.createGravestone(pressed, imageStore, world);
+            world.addEntity(g);
 
+        }
         //Explode on click
         CustomAnimation ex = Factory.createAnimation(pressed, imageStore.getImageList(Functions.EXPLOSION_KEY), Functions.EXPLOSION_ANIMATION_PERIOD, world, scheduler);
         world.addEntity(ex);
@@ -92,6 +102,7 @@ public final class VirtualWorld extends PApplet
         Crater crater = Factory.createCrater("crater", pressed, imageStore.getImageList(Functions.CRATER_KEY), world, scheduler);
         List<Point> craterPoints = crater.getAffectedPoints();
         crater.displayImages();
+        
         for (Point p: craterPoints){
             Optional<Entity> thing = world.getOccupant(p);
             if (thing.isPresent() && (thing.get() instanceof DudeFull || thing.get() instanceof DudeNotFull)){
@@ -100,6 +111,7 @@ public final class VirtualWorld extends PApplet
                 Point location = thing.get().getPosition();
                 world.removeEntity(thing.get());
                 scheduler.unscheduleAllEvents(thing.get());
+                // Replace dude with a gravestone
                 Gravestone g = Factory.createGravestone(location, imageStore, world);
                 world.addEntity(g);
                 // Replace dude with dead dude :(
