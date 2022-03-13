@@ -29,16 +29,25 @@ public class Fairy extends MovingEntity{
 
         if (fairyTarget.isPresent()) {
             Point tgtPos = fairyTarget.get().getPosition();
+            if(fairyTarget.get() instanceof Stump) {
+                if (this.moveTo(world, fairyTarget.get(), scheduler)) {
+                    AnimatedEntity sapling = Factory.createSapling("sapling_" + id, tgtPos,
+                            imageStore.getImageList(Functions.SAPLING_KEY));
 
-            if (this.moveTo(world, fairyTarget.get(), scheduler)) {
-                AnimatedEntity sapling = Factory.createSapling("sapling_" + id, tgtPos,
-                imageStore.getImageList(Functions.SAPLING_KEY));
+                    world.addEntity(sapling);
+                    sapling.scheduleActions(scheduler, world, imageStore);
+                }
+            }
+            else if(fairyTarget.get() instanceof Gravestone){
+                if (this.moveTo(world, fairyTarget.get(), scheduler)) {
+                    MovingEntity zombie = Factory.createZombie("zombie" + id, tgtPos, 500, 6,
+                            imageStore.getImageList(Functions.ZOMBIE_KEY));
 
-                world.addEntity(sapling);
-                sapling.scheduleActions(scheduler, world, imageStore);
+                    world.addEntity(zombie);
+                    zombie.scheduleActions(scheduler, world, imageStore);
+                }
             }
         }
-
         scheduler.scheduleEvent(this,
                 Factory.createActivityAction(this, world, imageStore),
                 this.getActionPeriod());

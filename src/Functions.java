@@ -45,6 +45,8 @@ public final class Functions
 
     public static final String GRAVE_KEY = "gravestone";
 
+    public static final String ZOMBIE_KEY = "zombie";
+
     public static final String DEADDUDE_KEY = "deaddude";
     public static final int DEADDUDE_ANIMATION_PERIOD = 2;
 

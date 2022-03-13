@@ -36,7 +36,7 @@ public class DudeFull extends MovingEntity{
     {
         Optional<Entity> fullTarget =
                 world.findNearest(this.getPosition(), new ArrayList<>(Arrays.asList(House.class)));
-                //world.findNearest(this.position, new ArrayList<>(Arrays.asList(EntityKind.HOUSE)));
+        //world.findNearest(this.position, new ArrayList<>(Arrays.asList(EntityKind.HOUSE)));
 
         if (fullTarget.isPresent() && this.moveTo(world,
                 fullTarget.get(), scheduler))
