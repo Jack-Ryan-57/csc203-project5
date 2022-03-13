@@ -85,23 +85,18 @@ public final class VirtualWorld extends PApplet
         System.out.println("CLICK! " + pressed.x + ", " + pressed.y);
         //Check current occupant
         Optional<Entity> ogOccupant = world.getOccupant(pressed);
-        boolean grave = false;
         //Check if dude is at the location we pressed on (because this spot will later be overtaken by the explosion entity)
+        MovingEntity occupant = null;
         if (ogOccupant.isPresent() && (ogOccupant.get() instanceof DudeFull || ogOccupant.get() instanceof DudeNotFull)){
-            System.out.println("CLICKED ON DUDE");
-            world.removeEntity(ogOccupant.get());
-            scheduler.unscheduleAllEvents(ogOccupant.get());
-            grave = true;
+            occupant = (MovingEntity)ogOccupant.get();
         }
         //Explode on click
-        Explosion ex = Factory.createExplosion(pressed, imageStore.getImageList(Functions.EXPLOSION_KEY), Functions.EXPLOSION_ANIMATION_PERIOD, world, scheduler);
+        Explosion ex = Factory.createExplosion(pressed, imageStore.getImageList(Functions.EXPLOSION_KEY), Functions.EXPLOSION_ANIMATION_PERIOD, world, scheduler, occupant, imageStore);
+        if (occupant != null){
+            ex.setAddGrave(true);
+        }
         world.addEntity(ex);
         ex.scheduleActions(scheduler, world, imageStore);
-        if (grave){
-            Gravestone g = Factory.createGravestone(pressed, imageStore, world);
-            world.addEntity(g);
-            ex.setInterrupt(true);
-        }
         // Make a crater at the point of the explosion (change the background)
         Crater crater = Factory.createCrater("crater", pressed, imageStore.getImageList(Functions.CRATER_KEY), world, scheduler);
         List<Point> craterPoints = crater.getAffectedPoints();

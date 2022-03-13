@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Optional;
 
 import processing.core.PImage;
 
@@ -111,9 +112,11 @@ public class Factory {
         List<PImage> images,
         int animationPeriod, 
         WorldModel world,
-        EventScheduler scheduler){
+        EventScheduler scheduler,
+        MovingEntity occupant,
+        ImageStore imageStore){
 
-                return new Explosion(p, images, 0, animationPeriod, world, scheduler, false);
+                return new Explosion(p, images, 0, animationPeriod, world, scheduler, false, occupant, imageStore);
 
     }
 
