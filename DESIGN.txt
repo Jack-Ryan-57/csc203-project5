@@ -1,0 +1,18 @@
+Method 1:
+adjacent()
+This method used two points and determined whether or not these points were next to each other. 
+I chose to put this in the Point class to eliminate one parameter, and because it made logical sense.
+However, I could also see it being reasonably left in the Functions class, as it is fairly general Math.
+
+Method 2:
+withinBounds()
+This method uses a considerable amount of data from both the Point class as well as the WorldModel class.
+I eventually decided on the WorldModel class, but it could also be argued that this should go in the 
+Point class. Thinking about calling this, p.withinBounds(world) makes sense, as does world.withinBounds(p).
+Now that I think about it, the former makes possibly more sense.
+
+Method 3:
+loadImages()
+I eventually decided to put this method inside ImageStore, as to me that is where it logically made sense, 
+and it did use an ImageStore object a few times. However, as this is a reasonably general function (like load), 
+I'd say this could have arguably been left as a static method in the Functions class.
