@@ -138,4 +138,15 @@ public class Factory {
     ){
             return new Crater(id, images, p, world, scheduler);
     }
+
+    public static Zombie createZombie(
+            String id,
+            Point position,
+            int actionPeriod,
+            int animationPeriod,
+            List<PImage> images)
+    {
+        return new Zombie(id, position, images, 0,
+                actionPeriod, animationPeriod);
+    }
 }
