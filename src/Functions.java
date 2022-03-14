@@ -72,6 +72,8 @@ public final class Functions
     public static final int HOUSE_COL = 2;
     public static final int HOUSE_ROW = 3;
 
+    public static final String GHOST_KEY = "ghost";
+
     public static final String FAIRY_KEY = "fairy";
     public static final int FAIRY_NUM_PROPERTIES = 6;
     public static final int FAIRY_ID = 1;
@@ -260,7 +262,7 @@ public final class Functions
                     pt,
                     Integer.parseInt(properties[FAIRY_ACTION_PERIOD]),
                     Integer.parseInt(properties[FAIRY_ANIMATION_PERIOD]),
-                    imageStore.getImageList(FAIRY_KEY));
+                    imageStore.getImageList(GHOST_KEY));
             world.tryAddEntity(entity);
         }
 

@@ -87,13 +87,20 @@ public final class VirtualWorld extends PApplet
         Optional<Entity> ogOccupant = world.getOccupant(pressed);
         //Check if dude is at the location we pressed on (because this spot will later be overtaken by the explosion entity)
         MovingEntity occupant = null;
-        if (ogOccupant.isPresent() && (ogOccupant.get() instanceof DudeFull || ogOccupant.get() instanceof DudeNotFull)){
+        if (ogOccupant.isPresent() && (ogOccupant.get() instanceof DudeFull || ogOccupant.get() instanceof DudeNotFull || ogOccupant.get() instanceof Zombie)){
             occupant = (MovingEntity)ogOccupant.get();
         }
         //Explode on click
         Explosion ex = Factory.createExplosion(pressed, imageStore.getImageList(Functions.EXPLOSION_KEY), Functions.EXPLOSION_ANIMATION_PERIOD, world, scheduler, occupant, imageStore);
-        if (occupant != null){
-            ex.setAddGrave(true);
+        if (occupant instanceof DudeFull || occupant instanceof DudeNotFull){
+            ex.setReplace(true);
+        }else if (occupant instanceof Zombie){
+            world.removeEntity(occupant);
+            scheduler.unscheduleAllEvents(occupant);
+            //Replace the zombie with a dude
+            ex.setReplaceType("dude");
+            ex.setReplace(true);
+            
         }
         world.addEntity(ex);
         ex.scheduleActions(scheduler, world, imageStore);

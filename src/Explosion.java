@@ -4,19 +4,20 @@ import processing.core.PImage;
 
 public class Explosion extends CustomAnimation{
 
-    private boolean addGrave;
+    private boolean replace;
     private ImageStore imageStore;
     private WorldModel world;
+    private String replaceType = "grave";
     private Point p;
 
     public boolean done = false;
 
     public Explosion(Point p, List<PImage> images, int imageIndex, int animationPeriod, WorldModel world,
-            EventScheduler scheduler, boolean addGrave, MovingEntity previous, ImageStore imageStore) {
+            EventScheduler scheduler, boolean replace, MovingEntity previous, ImageStore imageStore) {
         super(p, images, imageIndex, animationPeriod, world, scheduler);
         this.p = p;
         this.world = world;
-        this.addGrave = addGrave;
+        this.replace = replace;
         this.imageStore = imageStore;
         if (previous != null){
             world.removeEntity(previous);
@@ -30,16 +31,24 @@ public class Explosion extends CustomAnimation{
             this.setImageIndex(this.getImageIndex() + 1);
         }else{
             Factory.endAnimation(getWorld(), this, getScheduler());
-            if (addGrave){
-                System.out.println("WE GOT HERE");
-                Gravestone g = Factory.createGravestone(p, imageStore, world);
-                getWorld().addEntity(g);
-                this.addGrave = false;
+            if (replace){
+                if (replaceType == "grave"){
+                    Gravestone g = Factory.createGravestone(p, imageStore, world);
+                    getWorld().addEntity(g);
+                }else if (replaceType == "dude"){
+                    DudeNotFull newDude = Factory.createDudeNotFull("newdude", p, 3, Functions.DUDE_ANIMATION_PERIOD, Functions.DUDE_LIMIT, imageStore.getImageList(Functions.DUDE_KEY));
+                    newDude.scheduleActions(getScheduler(), world, imageStore);
+                }
+                this.replace = false;
             }
         }
     }
+
+    public void setReplaceType(String s){
+        this.replaceType = s;
+    }
     
-    public void setAddGrave(boolean b){
-        this.addGrave = b;
+    public void setReplace(boolean b){
+        this.replace = b;
     }
 }
